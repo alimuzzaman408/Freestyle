@@ -17,7 +17,8 @@ pipeline {
                 echo 'Hello Deploy'
             }
         }
-      post{
+      post
+        {
      always{
        emailext body: 'Summary', subject: 'TestingDemo', to: 'ali@gmail.com'
           }
