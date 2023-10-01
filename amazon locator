@@ -1,0 +1,69 @@
+package package1;
+
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class AmazonTest {
+	
+	
+	@Test
+	public void pocTest() throws InterruptedException {
+		WebDriverManager.chromedriver().setup();
+		WebDriver driver=new ChromeDriver();
+		JavascriptExecutor js=(JavascriptExecutor) driver;
+		driver.manage().window().maximize();
+		driver.get("https://www.amazon.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+		String expectedtitle="Amazon.com. Spend less. Smile more.";
+		String actualtitle=driver.getTitle();
+		Assert.assertEquals(actualtitle, expectedtitle);
+		
+		boolean b=driver.findElement(By.xpath("//span[contains(text(),'Account & Lists')]")).isDisplayed();		
+		if(b==true) {			
+			System.out.println("Account and list menu is displayed");
+			
+		}else {
+			System.out.println("Account and list menu is  not displayed");			
+		}		
+		boolean c=driver.findElement(By.xpath("//span[contains(text(),'& Orders')]")).isDisplayed();
+		Assert.assertTrue(c);
+		driver.findElement(By.xpath("(//span[contains(text(),'All')])[2]")).click();
+		WebElement see_all=driver.findElement(By.xpath("(//div[contains(text(),'see all')])[1]"));
+		js.executeScript("arguments[0].click();", see_all);
+		WebElement electronics=driver.findElement(By.xpath("//div[contains(text(),'Electronics')]"));
+		js.executeScript("arguments[0].click();", electronics);
+		WebElement phone=driver.findElement(By.xpath("//li/a[contains(text(),'Cell Phones & Accessories')]"));		
+		js.executeScript("arguments[0].click();", phone);		
+		driver.findElement(By.xpath("//input[@id='twotabsearchtextbox']")).sendKeys("iphone");
+		driver.findElement(By.xpath("//div/span[@id='nav-search-submit-text']")).click();		
+		driver.findElement(By.xpath("//span[contains(text(),'Apple iPhone 11, 64G')]")).click();		
+		String value=driver.findElement(By.xpath("//span[@id='productTitle']")).getText();
+		System.out.println(value);
+		Assert.assertEquals(value,"Apple iPhone 11, 64GB, Black - Unlocked (Renewed)");
+		driver.findElement(By.xpath("(//input[@id='add-to-cart-button'])[1]")).click();
+		WebElement s =driver.findElement(By.xpath("(//span[contains(text(),'No Thanks')])[1]"));
+		js.executeScript("arguments[0].click();", s);
+		Thread.sleep(1000);		
+		WebElement cart=driver.findElement(By.xpath("//a[contains(@href,'/gp/cart/view.html?ref_=nav_cart')]"));		
+		js.executeScript("arguments[0].click();", cart);
+		Thread.sleep(5000);
+		String value1=driver.findElement(By.xpath("(//span[contains(text(),'Apple iPhone 11, 64GB, Black - Unlocked (Renewed)')])[2]")).getText();
+        System.out.println("actualvalue::::"+value1);
+		if(value1.contains("Apple iPhone 11,")) {
+			Assert.assertTrue(true);			
+		}else {			
+			Assert.assertTrue(false,"Cart verfication is failed");
+		}
+		
+		driver.quit();
+	}
+}
