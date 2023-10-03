@@ -65,5 +65,58 @@ public class AmazonTest {
 		}
 		
 		driver.quit();
+
+         WebDriverManager.chromedriver().setup();
+		WebDriver driver=new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://text-compare.com/");
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+		
+		
+		WebElement box1=driver.findElement(By.xpath("//textarea[@id='inputText1']"));
+		WebElement box2=driver.findElement(By.xpath("//textarea[@id='inputText2']"));
+		
+
+		box1.sendKeys("BANGLADESH");
+		
+		Actions actions=new Actions(driver);
+		
+		actions.keyDown(Keys.CONTROL);
+		actions.sendKeys("a");
+		actions.keyUp(Keys.CONTROL);
+		actions.perform();
+		Thread.sleep(3000);
+		
+		actions.keyDown(Keys.CONTROL);
+		actions.sendKeys("c");
+		actions.keyUp(Keys.CONTROL);
+		actions.perform();
+		Thread.sleep(3000);
+		
+		actions.sendKeys(Keys.TAB);
+		
+		actions.keyDown(Keys.CONTROL);
+		actions.sendKeys("v");
+		actions.keyUp(Keys.CONTROL);
+		actions.perform();
+//		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
+
+
+
+
+
 	}
 }
